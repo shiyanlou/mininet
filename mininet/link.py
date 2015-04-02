@@ -201,6 +201,8 @@ class Intf( object ):
         # if self.node.inNamespace:
         # Link may have been dumped into root NS
         # quietRun( 'ip link del ' + self.name )
+        self.node.delIntf( self )
+        self.link = None
 
     def status( self ):
         "Return intf status as a string"
@@ -470,10 +472,10 @@ class Link( object ):
     def delete( self ):
         "Delete this link"
         self.intf1.delete()
-        # We only need to delete one side, though this doesn't seem to
-        # cost us much and might help subclasses.
-        # self.intf2.delete()
-
+        self.intf1 = None
+        self.intf2.delete()
+        self.intf2 = None
+    
     def stop( self ):
         "Override to stop and clean up link as needed"
         self.delete()
